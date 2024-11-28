@@ -7,7 +7,7 @@ terraform {
   }
   required_version = ">= 1.3.0"
 backend "s3" {
-    bucket         = "terraform-state-kazem-sindy"
+    bucket         = "terraforms3hasan"
     key            = "terraform/state/terraform.tfstate"
     region         = "us-east-1"
   }
