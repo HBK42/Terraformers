@@ -1,14 +1,20 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+  required_version = ">= 1.3.0"
+backend "s3" {
+    bucket         = "terraform-state-kazem-sindy"
+    key            = "terraform/state/terraform.tfstate"
+    region         = "us-east-1"
+  }
+}
 # AWS Provider konfigurieren
 provider "aws" {
   region = "us-east-1" # Region, in der die Ressourcen bereitgestellt werden
-}
-
-terraform {
-  backend "s3" {
-    bucket = "terraforms3hasan"
-    key    = "terraform/state/terraform.tfstate"
-    region = "us-east-1"
-  }
 }
 
 # VPC erstellen
