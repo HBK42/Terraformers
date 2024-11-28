@@ -3,6 +3,14 @@ provider "aws" {
   region = "us-east-1" # Region, in der die Ressourcen bereitgestellt werden
 }
 
+terraform {
+  backend "s3" {
+    bucket = "terraforms3hasan"
+    key    = "terraform/state/terraform.tfstate"
+    region = "us-east-1"
+  }
+}
+
 # VPC erstellen
 resource "aws_vpc" "custom_vpc" {
   cidr_block = "10.0.0.0/16" # Netzbereich für die VPC
