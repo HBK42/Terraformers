@@ -31,12 +31,13 @@ jobs:
       - name: Configure Backend Environment
         run: |
           echo "TF_S3_BUCKET=terraforms3hasan" >> $GITHUB_ENV
+          echo "TF_S3_BUCKET set to: $TF_S3_BUCKET"
 
       # Initialize Terraform with backend settings
       - name: Initialize Terraform
         run: |
           terraform init \
-            -backend-config="bucket=${TF_S3_BUCKET}" \
+            -backend-config="bucket=${{ env.TF_S3_BUCKET }}" \
             -backend-config="key=terraform/state/terraform.tfstate" \
             -backend-config="region=us-east-1"
 
