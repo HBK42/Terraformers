@@ -1,0 +1,47 @@
+name: Terraform Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform-deployment:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Retrieve Repository Code
+        uses: actions/checkout@v3
+
+      # Set up Terraform environment
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.3.0
+
+      # Set AWS credentials using session token
+      - name: Configure AWS Access
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1
+
+      # Set Terraform backend environment variables
+      - name: Set Backend Configuration
+        run: |
+          echo "TF_S3_BUCKET=terraforms3hasan" >> $GITHUB_ENV
+
+      # Initialize Terraform with backend configuration
+      - name: Initialize Terraform
+        run: |
+          terraform init \
+            -backend-config="bucket=${TF_S3_BUCKET}" \
+            -backend-config="key=terraform/state/terraform.tfstate" \
+            -backend-config="region=us-east-1"
+
+      # Apply Terraform configuration to provision resources
+      - name: Deploy Infrastructure
+        run: terraform apply -auto-approve
